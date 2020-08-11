@@ -5,7 +5,8 @@ import {
   Routes,
   Route,
   Link,
-  Outlet
+  Outlet,
+  useParams
 } from 'react-router-dom';
 
 function App() {
@@ -22,13 +23,28 @@ function App() {
     <Route path="/" element={<Home/>} />
     <Route path="Store" element={<Store/>} >
       <Route path="/" element={<LaunchIndex/>}/>
+      <Route path=":slug" element={<LaunchShoe/>}/>
+
 
 </Route>
+    <Route path="*" element={<NotFound/>}/>
    </Routes>
   </Router>
     
   
   )};
+
+
+    
+  function NotFound(){
+    return(
+    <div>
+      <h1>Not Found</h1>
+      </div>
+
+
+    )}
+
 
 
     function Home(){
@@ -56,11 +72,15 @@ function App() {
         return(
           <ul>
             {Object.entries(shoes).map(([slug , {name ,img }]) => 
+            
             <li key={slug}>
+              <Link to={`/Store/${slug}`}>
               <h2>{name}</h2>
               <img src={img} alt={name}/>
-
-            </li> )}
+              </Link>
+            </li>
+          
+             )}
 
 
 
@@ -71,6 +91,28 @@ function App() {
 
         )}
 
+
+        function LaunchShoe(){
+          const { slug } = useParams();
+          const shoe = shoes[slug]
+
+          if(!shoe){
+            return(
+            <h1>Not Found</h1>
+             ) }
+
+             const {name , img} = shoe;
+
+          return(
+          <div>
+            <h2>{name}</h2>
+            <img src={img} alt={name}/>
+
+          </div>
+
+
+
+          )}
 
 
 
